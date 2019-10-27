@@ -48,9 +48,13 @@ def scanner(prog):
         if state == 'incomment':
             while(prog[ptr] != '}'):
                 ptr += 1
+                if(ptr == len(prog)):
+                    print('7aseb error: comment not closed')
+                    sys.exit()
             if(prog[ptr] == '}'):
                 state = 'start'
                 ptr += 1
+            
 
         if state == 'id':
             if(ptr < len(prog)):
@@ -110,6 +114,7 @@ def scanner(prog):
                 ptr += 1
             else:
                 print('7aseb assign error')
+                sys.exit()
             
         if state == 'done':
             #TODO reseverd, symbol, number, identifier
@@ -124,10 +129,11 @@ def scanner(prog):
                     print('assign:', st)
                 elif(issym(st)):
                     print('symbol:' , st)
-                elif(st.isalpha):
+                elif(st.isalpha()):
                     print('identifier:', st)
                 else:
                     print('7aseb error w 5las')
+                    sys.exit()
                     
 
 
