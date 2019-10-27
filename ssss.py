@@ -1,3 +1,4 @@
+import sys
 def isres(st):
     if st == 'if' or st == 'then' or st == 'else' or st == 'end' or st == 'repeat' or st == 'until' or st == 'read' or st == 'write':
         result = 1
@@ -61,11 +62,16 @@ def scanner(prog):
                         break 
                         
                 if(finish == 0):
+                    ######t2rebn lw geh num aw 7aga msh symbol f nos el id error###
                     if(prog[ptr] == ' ' ):
                         #el id 5ls ro7 le done
                         #TODO check space wa7da wla eh
                         state = 'done'
                         ptr += 1
+                    elif not(issym(prog[ptr])):
+                        print('7aseb identifier error')
+                        sys.exit()
+                    
                         
             state = 'done'
             """   
@@ -89,6 +95,9 @@ def scanner(prog):
                         #TODO check space wa7da wla eh
                         state = 'done'
                         ptr += 1
+                    elif not(issym(prog[ptr])):
+                        print('7aseb number error')
+                        sys.exit()
                         
             state = 'done'
             
@@ -124,4 +133,3 @@ def scanner(prog):
 
 prog = input('ektb:')
 scanner(prog)
-
