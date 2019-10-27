@@ -15,6 +15,7 @@ def issym(st):
 #TODO put strings in list of list containing value and name of each
 def scanner(prog):
     ptr = 0
+    finish = 0
     state = 'start' #start
     while(ptr <= len(prog)-1):
         
@@ -51,39 +52,47 @@ def scanner(prog):
                 ptr += 1
 
         if state == 'id':
-            while(prog[ptr].isalpha()):
-                st += prog[ptr]
-                ptr += 1
-                if not ptr < len(prog):
-                    ptr-= 1
-                    break
-            if(prog[ptr] == ' ' ):
-                #el id 5ls ro7 le done
-                #TODO check space wa7da wla eh
-                state = 'done'
-                ptr += 1
+            if(ptr < len(prog)):
+                while(prog[ptr].isalpha()):
+                    st += prog[ptr]
+                    ptr += 1
+                    if(ptr == len(prog)):
+                        finish = 1
+                        break 
+                        
+                if(finish == 0):
+                    if(prog[ptr] == ' ' ):
+                        #el id 5ls ro7 le done
+                        #TODO check space wa7da wla eh
+                        state = 'done'
+                        ptr += 1
+                        
             state = 'done'
             """   
-            if prog[ptr] != ' ':
-                #error
-                #TODO ynf3 yb2o laz2en f b3d?
-                print('7aseb identifier error')
-             """   
+                if prog[ptr] != ' ':
+                    #error
+                    #TODO ynf3 yb2o laz2en f b3d?
+                    print('7aseb identifier error')
+            """   
                 
         if state == 'num':
-            while(prog[ptr].isdigit()):
-                st += prog[ptr]
-                ptr += 1
-                if not ptr < len(prog):
-                    ptr-= 1
-                    break
+            if(ptr < len(prog)):
+                while(prog[ptr].isdigit()):
+                    st += prog[ptr]
+                    ptr += 1
+                    if(ptr == len(prog)):
+                        finish = 1
+                        break
+                if(finish == 0):
+                    if(prog[ptr] == ' ' ):
+                        #el num 5ls ro7 le done
+                        #TODO check space wa7da wla eh
+                        state = 'done'
+                        ptr += 1
+                        
             state = 'done'
-            if(prog[ptr] == ' ' ):
-                #el num 5ls ro7 le done
-                #TODO check space wa7da wla eh
-                state = 'done'
-                ptr += 1
             
+                
 
         if state == 'assign':
             if prog[ptr] == '=':
@@ -115,3 +124,4 @@ def scanner(prog):
 
 prog = input('ektb:')
 scanner(prog)
+
