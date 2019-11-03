@@ -8,7 +8,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-from debug import *
+from Algorithm import *
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
