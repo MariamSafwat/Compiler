@@ -1,9 +1,13 @@
 import sys
 
+#TODO return i in functions
+#TODO check if i>=len(token) in functions
+
 def if_stmt(token,i):
     
     i += 1
     exp(token,i)
+    
     if(token[i][0] == 'THEN'):
         i += 1
         stmt_seq(token,i)
@@ -55,9 +59,11 @@ def read_stmt(token,i):
     if(token[i][1] == 'IDENTIFIER'):
         print(token[i][0])
         i += 1
+        print('fe id i:',i)
     else:
         print('7aseb error')
         sys.exit()
+    return i
     
 
 
@@ -142,16 +148,23 @@ def factor(token,i):
 
 def stmt_seq(token,i):
     print(token)
-    stmt(token,i)
+    
+    i = stmt(token,i)
+    print(i)
     while(1):
-        if(token[i][1]=='SEMICOLON'):
-            #TODO create node fel tree 
-            print(token)
-            i += 1
-            stmt(token,i)
-        else:
-            print('7aseb error de')
-            sys.exit()  
+        print('fe while i:',i)
+        if(i>=len(token)):
+             print('7aseb error len')
+             sys.exit()
+        else:            
+            if(token[i][1]=='SEMICOLON'):
+                #TODO create node fel tree 
+                print(token)
+                i += 1
+                i = stmt(token,i)
+            else:
+                print('7aseb error de')
+                sys.exit()  
         
         
 
@@ -161,22 +174,23 @@ def stmt(token,i) :
     if(token[i][1] == 'IF'):
         if_stmt(token)
     elif(token[i][1] == 'REPEAT'):
-        repeat_stmt(token)
+        i = repeat_stmt(token)
     elif (token[i][1] == 'IDENTIFIER'):
         assign_stmt(token)
     elif(token[i][1]=='READ'):
         print('read wslt')
-        read_stmt(token,i)
+        i = read_stmt(token,i)
     elif(token[i][1]=='WRITE'):
         write_stmt(token)
     else :
         print('7aseb error')
         sys.exit()
+    return i 
 
 def parser(token):
     print(token)
-    for i in range(len(token)):
-        stmt_seq(token,i)
+    for m in range(len(token)):
+        stmt_seq(token,m)
 
 tokens = input("Enter list")
 lo = []
