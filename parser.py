@@ -128,12 +128,15 @@ def write_stmt(token,i):
 
 def exp(token,i):
     i = simple_exp(token,i)
-    while comparison_op(token,i):
+    flag,i = comparison_op(token,i)
+    while flag:
+        print('d5l comp',i)
         i = simple_exp(token,i)
+        flag,i = comparison_op(token,i)
     return i
 
 def comparison_op(token,i):
-    if token[i][0] == '<' or token[i][0] == '>' or token[i][0] == '=':
+    if token[i][1] == 'LESSTHAN' or token[i][0] == '>' or token[i][0] == '=':
         #TODO create node fel tree
         node = str('op ('+ token[i][0] + ')')
         G.add_node(node)
@@ -143,10 +146,10 @@ def comparison_op(token,i):
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
              parser(token,i)
-        return True
+        return True,i
     else:
         print('7aseb error')
-        return False
+        return False,i
         #sys.exit()
 
 def simple_exp(token,i):
@@ -222,12 +225,13 @@ def factor(token,i):
             print('7aseb error')
             sys.exit()
             
-    elif token[i][1] == 'NUMBER' or token[i][1] == 'INDENTIFIER':
+    elif token[i][1] == 'NUMBER' or token[i][1] == 'IDENTIFIER':
+        print('fh')
         #TODO create node fel tree
         if(token[i][1] == 'NUMBER'):
             node = str('const ('+ token[i][0] + ')')
             
-        elif(token[i][1] == 'INDENTIFIER'):
+        elif(token[i][1] == 'IDENTIFIER'):
             node = str('id ('+ token[i][0] + ')')
         
         G.add_node(node)
@@ -250,6 +254,15 @@ def stmt_seq(token,i):
     i = stmt(token,i)
     print('i=',i)
     print('hna')
+    while(token[i][1]=='SEMICOLON'):
+        i += 1
+        if(i>=len(token)):
+                print('7aseb error len: el prog 5ls')
+                parser(token,i)
+        i = stmt(token,i)
+
+        
+    '''
     while(1):
         print('fe while i:',i)
         print('hna brdo')
@@ -263,8 +276,9 @@ def stmt_seq(token,i):
                      
             i = stmt(token,i)
         else:
-            print('7aseb error de')
+            print('msh semicolon')
             sys.exit()
+    '''
     return i
         
         
@@ -273,6 +287,7 @@ def stmt(token,i) :
     print('stmt')
     print('i=',i)
     if(token[i][1] == 'IF'):
+        print('d5l if')
         G.add_node('if')
         i = if_stmt(token,i)
         if(i>=len(token)):
