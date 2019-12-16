@@ -1,65 +1,52 @@
 import sys
 
-#TODO return i in functions
-#TODO check if i>=len(token) in functions
-
 def if_stmt(token,i):
     
     i += 1
-    exp(token,i)
+    if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+    i = exp(token,i)
     
     if(token[i][0] == 'THEN'):
+        
         i += 1
-        stmt_seq(token,i)
+        if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+        i = stmt_seq(token,i)
     else:
         print('7aseb error')
         sys.exit()
 
     if(token[i][0] == 'ELSE'):
         i += 1
-        stmt_seq(token,i)
+        if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+        i = stmt_seq(token,i)
     if(token[i][0] == 'END'):
         i += 1
+        if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
     else:
         print('7aseb error')
         sys.exit()
-    stmt_seq(token,i)
+    i = stmt_seq(token,i)
+    return i
     
     
             
 
 def repeat_stmt(token,i):
     i += 1
-    stmt_seq(token,i)
+    if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+    i = stmt_seq(token,i)
     if(token[i][0] == 'UNTIL'):
-        exp(token,i)
-    else:
-        print('7aseb error')
-        sys.exit()
-    
-
-
-def assign_stmt(token,i):
-    i += 1
-    if(token[i][0] == ':='):
-        i += 1
-        exp(token,i)
-    else:
-        print('7aseb error')
-        sys.exit()
-    
-
-def read_stmt(token,i):
-    print('wsl l read_stmt')
-    i += 1
-    if(i> len(token)):
-        print('7aseb error len')
-        sys.exit
-    
-    if(token[i][1] == 'IDENTIFIER'):
-        print(token[i][0])
-        i += 1
-        print('fe id i:',i)
+        i = exp(token,i)
     else:
         print('7aseb error')
         sys.exit()
@@ -67,22 +54,67 @@ def read_stmt(token,i):
     
 
 
+def assign_stmt(token,i):
+    i += 1
+    if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+    if(token[i][0] == ':='):
+        i += 1
+        if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+        i = exp(token,i)
+    else:
+        print('7aseb error')
+        sys.exit()
+    return i
+    
+
+def read_stmt(token,i):
+    print('wsl l read_stmt')
+    i += 1
+    if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+    
+    if(token[i][1] == 'IDENTIFIER'):
+        print(token[i][0])
+        i += 1
+        if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+        print('fe id i:',i)
+    else:
+        print('7aseb error')
+        sys.exit()
+        
+    return i
+    
+
+
 def write_stmt(token,i):
     i += 1
-    exp(token,i)
-
+    if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+    i = exp(token,i)
+    return i
 
 def exp(token,i):
-    simple_exp(token,i)
+    i = simple_exp(token,i)
     while comparison_op(token[i][0]):
-        simple_exp(token,i)
-
+        i = simple_exp(token,i)
+    return i
 
 def comparison_op(token,i):
     if token == '<' or token == '>' or token == '=':
         #TODO create node fel tree 
         print(token,i)
         i += 1
+        if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
         return True
     else:
         print('7aseb error')
@@ -90,28 +122,32 @@ def comparison_op(token,i):
         sys.exit()
 
 def simple_exp(token,i):
-    term(token,i)
+    i = term(token,i)
     while addop(token[i][0]):
-        term(token,i)
-
+        i = term(token,i)
+    return i
 
 
 def term(token,i):
-    factor(token,i)
+    i = factor(token,i)
     while mulop(token[i][0]):
-        factor(token,i)
-    
+        i = factor(token,i)
+    return i
 
 def addop(token,i):
     if token == '+' or token == '-':
         #TODO create node fel tree 
         print(token)
         i += 1
+        if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
         return True
     else:
         print('7aseb error')
         return False
         sys.exit()
+    return i
 
 
 def mulop(token,i):
@@ -119,6 +155,9 @@ def mulop(token,i):
         #TODO create node fel tree 
         print(token)
         i += 1
+        if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
         return True
     else:
         print('7aseb error')
@@ -129,10 +168,22 @@ def factor(token,i):
     #factor -> (exp) | number | identifier
     if token[i][0] == '(':
         i += 1
-        exp(token,i)
+        if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+             
+        i = exp(token,i)
         i += 1
+        if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+             
         if token[i][0] == ')':
             i += 1
+            if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
+             
         else:
             print('7aseb error')
             sys.exit()
@@ -140,9 +191,13 @@ def factor(token,i):
         #TODO create node fel tree 
         print(token[i][0])
         i += 1
+        if(i>=len(token)):
+             print('7aseb error len: el prog 5ls')
+             sys.exit()
     else:
         print('7aseb error')
         sys.exit()
+    return i
         
 
 
@@ -152,19 +207,21 @@ def stmt_seq(token,i):
     i = stmt(token,i)
     print(i)
     while(1):
-        print('fe while i:',i)
-        if(i>=len(token)):
-             print('7aseb error len')
-             sys.exit()
-        else:            
-            if(token[i][1]=='SEMICOLON'):
-                #TODO create node fel tree 
-                print(token)
-                i += 1
-                i = stmt(token,i)
-            else:
-                print('7aseb error de')
-                sys.exit()  
+        print('fe while i:',i)           
+        if(token[i][1]=='SEMICOLON'):
+            #TODO create node fel tree 
+            print(token)
+            i += 1
+            if(i>=len(token)):
+                
+                print('7aseb error len: el prog 5ls')
+                sys.exit()
+                     
+            i = stmt(token,i)
+        else:
+            print('7aseb error de')
+            sys.exit()
+    return i
         
         
 
@@ -172,16 +229,16 @@ def stmt(token,i) :
     print(token)
     print(i)
     if(token[i][1] == 'IF'):
-        if_stmt(token)
+        i = if_stmt(token)
     elif(token[i][1] == 'REPEAT'):
         i = repeat_stmt(token)
     elif (token[i][1] == 'IDENTIFIER'):
-        assign_stmt(token)
+        i = assign_stmt(token)
     elif(token[i][1]=='READ'):
         print('read wslt')
         i = read_stmt(token,i)
     elif(token[i][1]=='WRITE'):
-        write_stmt(token)
+        i = write_stmt(token)
     else :
         print('7aseb error')
         sys.exit()
@@ -189,8 +246,9 @@ def stmt(token,i) :
 
 def parser(token):
     print(token)
-    for m in range(len(token)):
-        stmt_seq(token,m)
+    m=0
+    while(m<len(token)):
+        m = stmt_seq(token,m)
 
 tokens = input("Enter list")
 lo = []
