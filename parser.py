@@ -2,8 +2,6 @@ import sys
 import networkx as nx
 import matplotlib.pyplot as plt
 
-#TODO nshel sys.exit() w n5leh yndah parser() zy goz2 read f stmt()
-
 G = nx.Graph()
 
 def if_stmt(token,i):
@@ -11,33 +9,35 @@ def if_stmt(token,i):
     i += 1
     if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
     i = exp(token,i)
     
-    if(token[i][0] == 'THEN'):
+    if(token[i][1] == 'THEN'):
         G.add_node('then')
         i += 1
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
+             
         i = stmt_seq(token,i)
     else:
         print('7aseb error')
         sys.exit()
 
-    if(token[i][0] == 'ELSE'):
+    if(token[i][1] == 'ELSE'):
         G.add_node('else')
         i += 1
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
+             
         i = stmt_seq(token,i)
-    if(token[i][0] == 'END'):
+    if(token[i][1] == 'END'):
         G.add_node('end')
         i += 1
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
     else:
         print('7aseb error')
         sys.exit()
@@ -51,9 +51,10 @@ def repeat_stmt(token,i):
     i += 1
     if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
+             
     i = stmt_seq(token,i)
-    if(token[i][0] == 'UNTIL'):
+    if(token[i][1] == 'UNTIL'):
         G.add_node('until')
         i = exp(token,i)
     else:
@@ -64,10 +65,13 @@ def repeat_stmt(token,i):
 
 
 def assign_stmt(token,i):
+    print('assign_stmt')
     i += 1
+    print('i=',i)
     if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
+             
     if(token[i][0] == ':='):
         
         node = str('assign ('+ token[i-1][0] + ')')
@@ -76,7 +80,8 @@ def assign_stmt(token,i):
         i += 1
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
+             
         i = exp(token,i)
     else:
         print('7aseb error')
@@ -89,7 +94,7 @@ def read_stmt(token,i):
     i += 1
     if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
     
     if(token[i][1] == 'IDENTIFIER'):
         
@@ -100,7 +105,7 @@ def read_stmt(token,i):
         i += 1
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             #sys.exit()
+             parser(token,i)
         print('fe id i:',i)
     else:
         print('7aseb error')
@@ -116,58 +121,58 @@ def write_stmt(token,i):
     i += 1
     if(i>=len(token)):
         print('7aseb error len: el prog 5ls')
-        sys.exit()
+        parser(token,i)
          
     i = exp(token,i)
     return i
 
 def exp(token,i):
     i = simple_exp(token,i)
-    while comparison_op(token[i][0]):
+    while comparison_op(token,i):
         i = simple_exp(token,i)
     return i
 
 def comparison_op(token,i):
-    if token == '<' or token == '>' or token == '=':
+    if token[i][0] == '<' or token[i][0] == '>' or token[i][0] == '=':
         #TODO create node fel tree
-        node = str('op ('+ token + ')')
+        node = str('op ('+ token[i][0] + ')')
         G.add_node(node)
         
         print(token,i)
         i += 1
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
         return True
     else:
         print('7aseb error')
         return False
-        sys.exit()
+        #sys.exit()
 
 def simple_exp(token,i):
     i = term(token,i)
-    while addop(token[i][0]):
+    while addop(token,i):
         i = term(token,i)
     return i
 
 
 def term(token,i):
     i = factor(token,i)
-    while mulop(token[i][0]):
+    while mulop(token,i):
         i = factor(token,i)
     return i
 
 def addop(token,i):
-    if token == '+' or token == '-':
+    if token[i][0] == '+' or token[i][0] == '-':
         #TODO create node fel tree
-        node = str('op ('+ token + ')')
+        node = str('op ('+ token[i][0] + ')')
         G.add_node(node)
         
         print(token)
         i += 1
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
         return True
     else:
         print('7aseb error')
@@ -177,16 +182,16 @@ def addop(token,i):
 
 
 def mulop(token,i):
-    if token == '*' or token == '/' :
+    if token[i][0] == '*' or token[i][0] == '/' :
         #TODO create node fel tree
-        node = str('op ('+ token + ')')
+        node = str('op ('+ token[i][0] + ')')
         G.add_node(node)
         
         print(token)
         i += 1
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
         return True
     else:
         print('7aseb error')
@@ -199,27 +204,29 @@ def factor(token,i):
         i += 1
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
              
         i = exp(token,i)
         i += 1
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
              
         if token[i][0] == ')':
             i += 1
             if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
              
         else:
             print('7aseb error')
             sys.exit()
+            
     elif token[i][1] == 'NUMBER' or token[i][1] == 'INDENTIFIER':
         #TODO create node fel tree
         if(token[i][1] == 'NUMBER'):
             node = str('const ('+ token[i][0] + ')')
+            
         elif(token[i][1] == 'INDENTIFIER'):
             node = str('id ('+ token[i][0] + ')')
         
@@ -229,7 +236,7 @@ def factor(token,i):
         i += 1
         if(i>=len(token)):
              print('7aseb error len: el prog 5ls')
-             sys.exit()
+             parser(token,i)
     else:
         print('7aseb error')
         sys.exit()
@@ -238,18 +245,19 @@ def factor(token,i):
 
 
 def stmt_seq(token,i):
-    print(token)
+    print('stmt_seq')
     
     i = stmt(token,i)
-    print(i)
+    print('i=',i)
+    print('hna')
     while(1):
-        print('fe while i:',i)           
+        print('fe while i:',i)
+        print('hna brdo')
         if(token[i][1]=='SEMICOLON'):
             #TODO create node fel tree 
             print(token)
             i += 1
             if(i>=len(token)):
-                
                 print('7aseb error len: el prog 5ls')
                 parser(token,i)
                      
@@ -262,18 +270,27 @@ def stmt_seq(token,i):
         
 
 def stmt(token,i) :
-    print(token)
-    print(i)
+    print('stmt')
+    print('i=',i)
     if(token[i][1] == 'IF'):
         G.add_node('if')
         i = if_stmt(token,i)
+        if(i>=len(token)):
+            print('7aseb error len: el prog 5ls HNAA')
+            parser(token,i)
         
     elif(token[i][1] == 'REPEAT'):
         G.add_node('repeat')
         i = repeat_stmt(token,i)
+        if(i>=len(token)):
+            print('7aseb error len: el prog 5ls HNAA')
+            parser(token,i)
         
     elif (token[i][1] == 'IDENTIFIER'):
         i = assign_stmt(token,i)
+        if(i>=len(token)):
+            print('7aseb error len: el prog 5ls HNAA')
+            parser(token,i)
         
     elif(token[i][1]=='READ'):
         print('read wslt')
@@ -285,6 +302,9 @@ def stmt(token,i) :
         
     elif(token[i][1]=='WRITE'):
         i = write_stmt(token,i)
+        if(i>=len(token)):
+            print('7aseb error len: el prog 5ls HNAA')
+            parser(token,i)
         
     else :
         print('7aseb error')
@@ -306,9 +326,10 @@ def parser(token,m):
 tokens = input("Enter list")
 lo = []
 
-token_li = tokens.split(";")#TODO lma n-create el gui nbadlha b eno y-replace \n b ; b3d kda y-split
+token_li = tokens.split("$")#TODO lma n-create el gui nbadlha b eno y-replace \n b ; b3d kda y-split
 for k in range(len(token_li)):
     token_list = token_li[k].split(",")
+    token_list = [x.strip(' ') for x in token_list]
     lo.append(token_list)
 
 
