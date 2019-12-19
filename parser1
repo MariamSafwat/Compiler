@@ -4,9 +4,10 @@ import matplotlib.pyplot as plt
 import random
 
 G = nx.DiGraph()
-
-def draw():
-    nx.draw(G, with_labels=True)
+output=[]
+def draw(token):
+    pos = hierarchy_pos(G,output[0][0])
+    nx.draw(G,pos=pos, with_labels=True)
     plt.draw()
     plt.show()
 
@@ -157,6 +158,7 @@ def read_stmt(token,i):
     if(token[i][1] == 'IDENTIFIER'):
         
         read_node = str('read ('+ token[i][0] + ')')
+        output.append([read_node,'READ'])
         #G.add_node(node)
         
         print(token[i][0])
@@ -438,7 +440,7 @@ def parser(token,m):
     if(m>=len(token)):
         #pos = hierarchy_pos(G,token[0][0])
         
-        draw()
+        draw(token)
         #plt.savefig("path.png")
         sys.exit()
         
@@ -462,10 +464,10 @@ for k in range(len(token_li)):
 print(lo)
 parser(lo,0)
 
-
+'''
 nx.draw(G, with_labels=True)
 plt.draw()
 plt.show()
-
+'''
 
 
