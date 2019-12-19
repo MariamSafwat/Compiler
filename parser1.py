@@ -7,7 +7,7 @@ G = nx.DiGraph()
 output=[]
 def draw(token):
     pos = hierarchy_pos(G,output[0][0])
-    nx.draw(G,pos=pos, with_labels=True)
+    nx.draw(G,pos=pos, with_labels=True,node_size=5000,node_color='pink')
     plt.draw()
     plt.show()
 
@@ -158,6 +158,7 @@ def read_stmt(token,i):
     if(token[i][1] == 'IDENTIFIER'):
         
         read_node = str('read ('+ token[i][0] + ')')
+        #G.add_node(read_node,node_shape='d')
         output.append([read_node,'READ'])
         #G.add_node(node)
         
@@ -464,10 +465,10 @@ for k in range(len(token_li)):
 print(lo)
 parser(lo,0)
 
-'''
+
 nx.draw(G, with_labels=True)
 plt.draw()
 plt.show()
-'''
+
 
 
